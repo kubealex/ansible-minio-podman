@@ -8,8 +8,8 @@ Role Variables
 The role has these predefined variables in *defaults/main.yml*:
     minio_api_port: 9000 # Sets up the listening port for bucket management
     minio_console_port: 9090 # Sets up the listening port for minio console
-    minio_root_user: admin # Sets the root user name
-    minio_root_password: redhat # Sets the root user password
+    minio_root_user: minio-admin # Sets the root user name
+    minio_root_password: minio-pwd # Sets the root user password
 
 Dependencies
 ------------
