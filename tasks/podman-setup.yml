@@ -1,0 +1,34 @@
+- name: Minio Setup | Configure podman network
+  containers.podman.podman_network:
+    name: minio
+    disable_dns: false
+    internal: false
+    recreate: false
+    state: present
+
+- name: Minio Setup | Configure podman volume
+  containers.podman.podman_volume:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - minio-data
+
+# - name: Minio Setup | Ensure Minio container is not present already
+#   containers.podman.podman_container:
+#     name: minio
+#     state: absent
+
+- name: Minio Setup | Create minio container
+  containers.podman.podman_container:
+    name: minio
+    network:
+      - minio
+    volume:
+      - minio-data:/data
+    image: quay.io/minio/minio server
+    ports:
+      - "{{ minio_bucket_port | default(9000,true) }}:9000"
+      - "{{ minio_console_port | default(9090,true) }}:9090"
+    env:
+      MINIO_ROOT_USER: "{{ minio_root_user }}"
+      MINIO_ROOT_PASSWORD: "{{ minio_root_password }}"

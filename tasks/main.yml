@@ -1,0 +1,9 @@
+---
+# tasks file for ansible-minio-podman
+- name: Include tasks for host setup
+  ansible.builtin.include_tasks:
+    file: host-setup.yml
+
+- name: Include tasks for Podman setup
+  ansible.builtin.include_tasks:
+    file: podman-setup.yml

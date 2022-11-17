@@ -1,0 +1,31 @@
+---
+- name: Minio Setup | Install and enable Podman
+  ansible.builtin.dnf:
+    name:
+      - podman
+    state: present
+  become: true
+
+- name: Minio Setup | Check if firewalld is running
+  ansible.builtin.service_facts:
+  become: true
+
+- name: Minio Setup | Configure firewalld if running
+  block:
+    - name: Minio Setup | Ensure firewalld is configured to accept traffic
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        state: enabled
+        permanent: true
+      loop:
+        - "{{ minio_bucket_port | default(9000, true) }}/tcp"
+        - "{{ minio_console_port | default(9090, true) }}/tcp"
+
+    - name: Minio Setup | Ensure firewalld is started
+      ansible.builtin.service:
+        name: firewalld
+        state: restarted
+        enabled: true
+  when: ansible_facts.services["firewalld.service"] is defined
+  become: true
+
