@@ -25,7 +25,8 @@
       - minio
     volume:
       - minio-data:/data
-    image: quay.io/minio/minio server
+    image: quay.io/minio/minio
+    command: "server /data --console-address ":9090"
     ports:
       - "{{ minio_bucket_port | default(9000,true) }}:9000"
       - "{{ minio_console_port | default(9090,true) }}:9090"
