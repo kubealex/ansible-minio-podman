@@ -1,6 +1,6 @@
 ---
 # defaults file for ansible-minio-podman
-minio_bucket_port: 9000
+minio_api_port: 9000
 minio_console_port: 9090
 minio_root_user: admin
 minio_root_password: redhat

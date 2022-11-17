@@ -18,7 +18,7 @@
         state: enabled
         permanent: true
       loop:
-        - "{{ minio_bucket_port | default(9000, true) }}/tcp"
+        - "{{ minio_api_port | default(9000, true) }}/tcp"
         - "{{ minio_console_port | default(9090, true) }}/tcp"
 
     - name: Minio Setup | Ensure firewalld is started
