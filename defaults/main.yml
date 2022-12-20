@@ -2,5 +2,6 @@
 # defaults file for ansible-minio-podman
 minio_api_port: 9000
 minio_console_port: 9090
+minio_configure_ssl: true
 minio_root_user: minio-admin
 minio_root_password: minio-pwd

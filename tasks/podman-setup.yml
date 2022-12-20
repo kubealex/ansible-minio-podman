@@ -18,6 +18,22 @@
 #     name: minio
 #     state: absent
 
+- name: Minio Setup | Create certs directory
+  ansible.builtin.file:
+    state: directory
+    path: ./certs
+    mode: 0755
+
+- name: Minio Setup | Generate private key for SSL certificate
+  community.crypto.openssl_privatekey:
+    path: ./certs/private.key
+
+- name: Minio Setup | Create simple self-signed certificate
+  community.crypto.x509_certificate:
+    path: ./certs/public.crt
+    privatekey_path: ./certs/private.key
+    provider: selfsigned
+
 - name: Minio Setup | Create minio container
   containers.podman.podman_container:
     name: minio
@@ -25,6 +41,7 @@
       - minio
     volume:
       - minio-data:/data
+      - "{{ './certs:/certs:Z' if minio_configure_ssl else omit }}"
     image: quay.io/minio/minio
     command: 'server /data --console-address :9090'
     ports:
@@ -33,3 +50,4 @@
     env:
       MINIO_ROOT_USER: "{{ minio_root_user | default('minio-admin', true) }}"
       MINIO_ROOT_PASSWORD: "{{ minio_root_password | default('minio-pwd', true) }}"
+      MINIO_SCHEME: "{{ 'https' if minio_configure_ssl | default('http', true) }}"
