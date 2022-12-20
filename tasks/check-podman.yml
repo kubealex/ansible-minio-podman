@@ -6,4 +6,4 @@
 - name: Print the package facts
   ansible.builtin.fail:
     msg: "Podman must be present to run"
-   when: ansible_facts.packages['podman'] is undefined
+  when: ansible_facts.packages['podman'] is undefined
