@@ -24,15 +24,18 @@
     path: ./certs
     mode: 0755
 
-- name: Minio Setup | Generate private key for SSL certificate
-  community.crypto.openssl_privatekey:
-    path: ./certs/private.key
+- name: Minio Setup | Configure certs for https
+  when: minio_configure_ssl
+  block:
+    - name: Minio Setup | Generate private key for SSL certificate
+      community.crypto.openssl_privatekey:
+        path: ./certs/private.key
 
-- name: Minio Setup | Create simple self-signed certificate
-  community.crypto.x509_certificate:
-    path: ./certs/public.crt
-    privatekey_path: ./certs/private.key
-    provider: selfsigned
+    - name: Minio Setup | Create simple self-signed certificate
+      community.crypto.x509_certificate:
+        path: ./certs/public.crt
+        privatekey_path: ./certs/private.key
+        provider: selfsigned
 
 - name: Minio Setup | Create minio container
   containers.podman.podman_container:

@@ -7,10 +7,14 @@ Role Variables
 --------------
 The role has these predefined variables in *defaults/main.yml*:
 
-    minio_api_port: 9000 # Sets up the listening port for bucket management
-    minio_console_port: 9090 # Sets up the listening port for minio console
-    minio_root_user: minio-admin # Sets the root user name
-    minio_root_password: minio-pwd # Sets the root user password
+
+| *variable* | *description* | *default* |
+|-----------------------|---------------------------------------------------|-------------- |
+| minio_api_port        | Sets up the listening port for bucket management  | 9000          |
+| minio_console_port    | Sets up the listening port for minio console      | 9090          |
+| minio_root_user       | Sets the root user name                           | minio-admin   |
+| minio_root_password   | Sets the root user password                       | minio-pwd     |
+| minio_configure_ssl:  | Configure SSL for minio connections               | true          |
 
 Dependencies
 ------------
