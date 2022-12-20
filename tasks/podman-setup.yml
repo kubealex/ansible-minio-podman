@@ -41,7 +41,7 @@
       - minio
     volume:
       - minio-data:/data
-      - "{{ './certs:/certs:Z' if minio_configure_ssl else omit }}"
+      - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
     image: quay.io/minio/minio
     command: 'server /data --console-address :9090'
     ports:
