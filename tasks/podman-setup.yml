@@ -4,8 +4,8 @@
   when:
     - minio_configure_ssl 
     - not minio_generate_certs
-    - minio_cert_path is not defined or minio_cert_path = ""
-    - minio_key_path is not defined or minio_key_path = ""
+    - minio_cert_path is not defined or minio_cert_path == ""
+    - minio_key_path is not defined or minio_key_path == ""
 
 - name: Minio Setup | Ensure Minio container is not present already
   containers.podman.podman_container:
