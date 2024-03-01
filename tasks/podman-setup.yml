@@ -77,15 +77,13 @@
     network:
       - minio
     volume:
-      - minio-data:/bitnami/minio/data
+      - minio-data:/data
       - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
-    image: docker.io/bitnami/minio:latest
-    # command: 'minio server /data --console-address :9090'
+    image: quay.io/minio/minio
+    command: 'minio server /data --console-address :9090'
     ports:
       - "{{ minio_api_port | default(9000,true) }}:9000"
       - "{{ minio_console_port | default(9090,true) }}:9090"
     env:
       MINIO_ROOT_USER: "{{ minio_root_user | default('minio-admin', true) }}"
       MINIO_ROOT_PASSWORD: "{{ minio_root_password | default('minio-pwd', true) }}"
-      MINIO_SCHEME: "{{ 'https' if minio_configure_ssl | default('http', true) }}"
-      MINIO_DEFAULT_BUCKETS: "{{ minio_default_buckets | default('', true) }}"
