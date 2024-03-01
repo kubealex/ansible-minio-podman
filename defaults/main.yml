@@ -5,3 +5,4 @@ minio_console_port: 9090
 minio_configure_ssl: true
 minio_root_user: minio-admin
 minio_root_password: minio-pwd
+minio_generate_certs: true

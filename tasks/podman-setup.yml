@@ -13,10 +13,10 @@
   loop:
     - minio-data
 
-# - name: Minio Setup | Ensure Minio container is not present already
-#   containers.podman.podman_container:
-#     name: minio
-#     state: absent
+- name: Minio Setup | Ensure Minio container is not present already
+  containers.podman.podman_container:
+    name: minio
+    state: absent
 
 - name: Minio Setup | Create certs directory
   ansible.builtin.file:
@@ -25,7 +25,7 @@
     mode: 0755
 
 - name: Minio Setup | Configure certs for https
-  when: minio_configure_ssl
+  when: minio_configure_ssl && minio_generate_certs
   block:
     - name: Minio Setup | Generate private key for SSL certificate
       community.crypto.openssl_privatekey:
