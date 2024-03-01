@@ -1,4 +1,4 @@
-ansible-gitea-podman
+ansible-minio-podman
 =========
 
 This is a quick and dirty role to instantiate a Podman based Minio [https://min.io/](https://min.io/) instance for dev/test purposes.
