@@ -79,7 +79,7 @@
     volume:
       - minio-data:/data
       - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
-    image: bitnami/minio:latest
+    image: docker.io/bitnami/minio:latest
     # command: 'minio server /data --console-address :9090'
     ports:
       - "{{ minio_api_port | default(9000,true) }}:9000"
