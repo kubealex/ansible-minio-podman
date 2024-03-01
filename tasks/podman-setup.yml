@@ -89,3 +89,4 @@
       MINIO_ROOT_PASSWORD: "{{ minio_root_password | default('minio-pwd', true) }}"
       MINIO_SCHEME: "{{ 'https' if minio_configure_ssl | default('http', true) }}"
       MINIO_DEFAULT_BUCKETS: "{{ minio_default_buckets | default('', true) }}"
+      MINIO_DATA_DIR: "/data"
