@@ -16,6 +16,8 @@ The role has these predefined variables in *defaults/main.yml*:
 | minio_root_password   | Sets the root user password                       | minio-pwd     |
 | minio_configure_ssl:  | Configure SSL for Minio connections               | true          |
 | minio_generate_certs  | Generate certs for Minio              | true          |
+| minio_cert_path       | Path for Minio certificate            | |
+| minio_key_path       | Path for Minio key            | |
 
 Dependencies
 ------------

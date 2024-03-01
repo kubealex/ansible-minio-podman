@@ -24,7 +24,7 @@
     path: ./certs
     mode: 0755
 
-- name: Minio Setup | Configure certs for https
+- name: Minio Setup | Generate and configure certs for https
   when: minio_configure_ssl && minio_generate_certs
   block:
     - name: Minio Setup | Generate private key for SSL certificate
@@ -37,6 +37,15 @@
         privatekey_path: ./certs/private.key
         provider: selfsigned
 
+- name:  Minio Setup | Configure certs for https
+  when: not minio_generate_certs
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ./certs
+  loop:
+    - "{{ minio_cert_path }}"
+    - "{{ minio_key_path }}"
+    
 - name: Minio Setup | Create minio container
   containers.podman.podman_container:
     name: minio
