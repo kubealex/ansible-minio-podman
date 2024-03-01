@@ -1,3 +1,13 @@
+- name: Minio Setup | Ensure Minio container is not present already
+  containers.podman.podman_container:
+    name: minio
+    state: absent
+
+- name: Minio Setup | Ensure podman network is not present
+  containers.podman.podman_network:
+    name: minio
+    state: absent
+
 - name: Minio Setup | Configure podman network
   containers.podman.podman_network:
     name: minio
@@ -6,17 +16,19 @@
     recreate: false
     state: present
 
+- name: Minio Setup | Ensure podman volume is not present
+  containers.podman.podman_volume:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - minio-data
+
 - name: Minio Setup | Configure podman volume
   containers.podman.podman_volume:
     name: "{{ item }}"
     state: present
   loop:
     - minio-data
-
-- name: Minio Setup | Ensure Minio container is not present already
-  containers.podman.podman_container:
-    name: minio
-    state: absent
 
 - name: Minio Setup | Create certs directory
   ansible.builtin.file:
@@ -42,11 +54,13 @@
 - name:  Minio Setup | Configure certs for https
   when: not minio_generate_certs
   ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: ./certs
+    src: "{{ item.source }}"
+    dest: ./certs/{{ item.dest }}
   loop:
-    - "{{ minio_cert_path }}"
-    - "{{ minio_key_path }}"
+    - source: "{{ minio_cert_path }}"
+      dest: public.crt
+    - source: "{{ minio_key_path }}"
+      dest: private.key
 
 - name: Minio Setup | Create minio container
   containers.podman.podman_container:
@@ -57,7 +71,7 @@
       - minio-data:/data
       - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
     image: quay.io/minio/minio
-    command: 'server /data --console-address :9090'
+    command: 'minio server /data --console-address :9090'
     ports:
       - "{{ minio_api_port | default(9000,true) }}:9000"
       - "{{ minio_console_port | default(9090,true) }}:9090"
