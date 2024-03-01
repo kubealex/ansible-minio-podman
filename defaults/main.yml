@@ -6,5 +6,3 @@ minio_configure_ssl: true
 minio_root_user: minio-admin
 minio_root_password: minio-pwd
 minio_generate_certs: true
-minio_cert_path: 
-minio_key_path: 

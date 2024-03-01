@@ -1,3 +1,12 @@
+- name: Minio Setup | Fail fast if variables are not set
+  ansible.builtin.fail:
+    msg: "You need to specifcy the path to certificate and key to use"
+  when:
+    - minio_configure_ssl 
+    - not minio_generate_certs
+    - minio_cert_path is not defined or minio_cert_path = ""
+    - minio_key_path is not defined or minio_key_path = ""
+
 - name: Minio Setup | Ensure Minio container is not present already
   containers.podman.podman_container:
     name: minio
@@ -70,8 +79,8 @@
     volume:
       - minio-data:/data
       - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
-    image: quay.io/minio/minio
-    command: 'minio server /data --console-address :9090'
+    image: bitnami/minio:latest
+    # command: 'minio server /data --console-address :9090'
     ports:
       - "{{ minio_api_port | default(9000,true) }}:9000"
       - "{{ minio_console_port | default(9090,true) }}:9090"
@@ -79,3 +88,4 @@
       MINIO_ROOT_USER: "{{ minio_root_user | default('minio-admin', true) }}"
       MINIO_ROOT_PASSWORD: "{{ minio_root_password | default('minio-pwd', true) }}"
       MINIO_SCHEME: "{{ 'https' if minio_configure_ssl | default('http', true) }}"
+      MINIO_DEFAULT_BUCKETS: "{{ minio_default_buckets | default('', true) }}"
