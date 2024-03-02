@@ -43,6 +43,7 @@
   ansible.builtin.file:
     state: directory
     path: ./certs
+    owner: 1001
     mode: "0775"
 
 - name: Minio Setup | Generate and configure certs for https
@@ -67,6 +68,7 @@
   ansible.builtin.copy:
     src: "{{ item.source }}"
     dest: ./certs/{{ item.dest }}
+    owner: 1001
     mode: "0775"
   loop:
     - source: "{{ minio_cert_path }}"
