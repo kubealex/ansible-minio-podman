@@ -39,40 +39,34 @@
   loop:
     - minio-data
 
-- name: Minio Setup | Create certs directory
-  ansible.builtin.file:
-    state: directory
-    path: ./certs
-    mode: "0775"
-
-- name: Minio Setup | Generate and configure certs for https
-  when:
-    - minio_configure_ssl
-    - minio_generate_certs
+- name: Minio Setup | Configure TLS
+  when: minio_configure_ssl
   block:
-    - name: Minio Setup | Generate private key for SSL certificate
-      community.crypto.openssl_privatekey:
-        path: ./certs/private.key
 
-    - name: Minio Setup | Create simple self-signed certificate
-      community.crypto.x509_certificate:
-        path: ./certs/public.crt
-        privatekey_path: ./certs/private.key
-        provider: selfsigned
+    - name: Minio Setup | Create certs directory
+      when:
+        - minio_configure_ssl
+      ansible.builtin.file:
+        state: directory
+        path: ./certs/CAs
+        mode: "0775"
+        recurse: true
 
-- name: Minio Setup | Configure certs for https
-  when:
-    - minio_configure_ssl
-    - not minio_generate_certs
-  ansible.builtin.copy:
-    src: "{{ item.source }}"
-    dest: ./certs/{{ item.dest }}
-    mode: "0775"
-  loop:
-    - source: "{{ minio_cert_path }}"
-      dest: public.crt
-    - source: "{{ minio_key_path }}"
-      dest: private.key
+    - name: Minio Setup | Configure certs for https
+      when:
+        - minio_configure_ssl
+        - not minio_generate_certs
+      ansible.builtin.copy:
+        src: "{{ item.source }}"
+        dest: ./certs/{{ item.dest }}
+        mode: "0775"
+      loop:
+        - source: "{{ minio_cert_path }}"
+          dest: public.crt
+        - source: "{{ minio_key_path }}"
+          dest: private.key
+        - source: "{{ minio_ca_path }}"
+          dest: CAs/myCA.crt
 
 - name: Minio Setup | Create minio container
   containers.podman.podman_container:

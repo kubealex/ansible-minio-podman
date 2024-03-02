@@ -14,9 +14,9 @@ Role Variables
 | minio_root_user       | Sets the root user name                           | minio-admin   |
 | minio_root_password   | Sets the root user password                       | minio-pwd     |
 | minio_configure_ssl:  | Configure SSL for Minio connections               | true          |
-| minio_generate_certs  | Generate certs for Minio                          | true          |
 | minio_cert_path       | Path for Minio certificate                        |               |
 | minio_key_path        | Path for Minio key                                |               |
+| minio_ca_path        | Path for Minio CA                                |               |
 | minio_default_buckets | Default buckets to create upon startup            |               |
 
 Dependencies
