@@ -17,6 +17,7 @@ Role Variables
 | minio_generate_certs  | Generate certs for Minio                          | true          |
 | minio_cert_path       | Path for Minio certificate                        |               |
 | minio_key_path        | Path for Minio key                                |               |
+| minio_default_buckets | Default buckets to create upon startup            |               |
 
 Dependencies
 ------------

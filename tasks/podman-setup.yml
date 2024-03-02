@@ -90,3 +90,4 @@
       MINIO_API_PORT_NUMBER: "{{ minio_api_port | default(9000, true) }}"
       MINIO_CONSOLE_PORT_NUMBER: "{{ minio_console_port | default(9001) }}"
       MINIO_SERVER_HOST: "{{ minio_server_host | default(ansible_fqdn, true) }}"
+      MINIO_DEFAULT_BUCKETS: "{{ minio_default_buckets | default('', true) }}"
