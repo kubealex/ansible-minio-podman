@@ -1,0 +1,2 @@
+minio_configure_ssl: true
+minio_generate_certs: true

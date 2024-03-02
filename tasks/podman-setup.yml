@@ -3,7 +3,7 @@
     msg: "You need to specifcy the path to certificate and key to use"
   when:
     - minio_configure_ssl
-    - not minio_generate_certs
+    - minio_generate_certs
     - minio_cert_path is not defined or minio_cert_path == ""
     - minio_key_path is not defined or minio_key_path == ""
 
@@ -61,7 +61,9 @@
         provider: selfsigned
 
 - name: Minio Setup | Configure certs for https
-  when: not minio_generate_certs
+  when:
+    - minio_configure_ssl
+    - not minio_generate_certs
   ansible.builtin.copy:
     src: "{{ item.source }}"
     dest: ./certs/{{ item.dest }}
