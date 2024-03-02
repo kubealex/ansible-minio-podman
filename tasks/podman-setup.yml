@@ -2,7 +2,7 @@
   ansible.builtin.fail:
     msg: "You need to specifcy the path to certificate and key to use"
   when:
-    - minio_configure_ssl 
+    - minio_configure_ssl
     - not minio_generate_certs
     - minio_cert_path is not defined or minio_cert_path == ""
     - minio_key_path is not defined or minio_key_path == ""
@@ -43,11 +43,11 @@
   ansible.builtin.file:
     state: directory
     path: ./certs
-    mode: 0755
+    mode: "0755"
 
 - name: Minio Setup | Generate and configure certs for https
-  when: 
-    - minio_configure_ssl 
+  when:
+    - minio_configure_ssl
     - minio_generate_certs
   block:
     - name: Minio Setup | Generate private key for SSL certificate
@@ -60,11 +60,12 @@
         privatekey_path: ./certs/private.key
         provider: selfsigned
 
-- name:  Minio Setup | Configure certs for https
+- name: Minio Setup | Configure certs for https
   when: not minio_generate_certs
   ansible.builtin.copy:
     src: "{{ item.source }}"
     dest: ./certs/{{ item.dest }}
+    mode: "0755"
   loop:
     - source: "{{ minio_cert_path }}"
       dest: public.crt
@@ -77,13 +78,15 @@
     network:
       - minio
     volume:
-      - minio-data:/data
+      - minio-data:/bitnami/minio/data
       - "{{ './certs:/root/.minio/certs:Z' if minio_configure_ssl else omit }}"
-    image: quay.io/minio/minio
-    command: 'minio server /data --console-address :9090'
+    image: docker.io/bitnami/minio
     ports:
-      - "{{ minio_api_port | default(9000,true) }}:9000"
-      - "{{ minio_console_port | default(9090,true) }}:9090"
+      - "{{ minio_api_port | default(9000, true) }}:{{ minio_api_port | default(9000, true) }}"
+      - "{{ minio_console_port | default(9001, true) }}:{{ minio_console_port | default(9001, true) }}"
     env:
       MINIO_ROOT_USER: "{{ minio_root_user | default('minio-admin', true) }}"
       MINIO_ROOT_PASSWORD: "{{ minio_root_password | default('minio-pwd', true) }}"
+      MINIO_API_PORT_NUMBER: "{{ minio_api_port | default(9000, true) }}"
+      MINIO_CONSOLE_PORT_NUMBER: "{{ minio_console_port | default(9001) }}"
+      MINIO_SERVER_HOST: "{{ minio_server_host | default(ansible_fqdn, true) }}"

@@ -5,19 +5,18 @@ This is a quick and dirty role to instantiate a Podman based Minio [https://min.
 
 Role Variables
 --------------
-The role has these predefined variables in *defaults/main.yml*:
-
 
 | *variable* | *description* | *default* |
 |-----------------------|---------------------------------------------------|-------------- |
 | minio_api_port        | Sets up the listening port for bucket management  | 9000          |
-| minio_console_port    | Sets up the listening port for minio console      | 9090          |
+| minio_console_port    | Sets up the listening port for minio console      | 9001          |
+| minio_server_host     | Sets up the external minio host                   | ansible_fqdn  |
 | minio_root_user       | Sets the root user name                           | minio-admin   |
 | minio_root_password   | Sets the root user password                       | minio-pwd     |
 | minio_configure_ssl:  | Configure SSL for Minio connections               | true          |
-| minio_generate_certs  | Generate certs for Minio              | true          |
-| minio_cert_path       | Path for Minio certificate            | |
-| minio_key_path       | Path for Minio key            | |
+| minio_generate_certs  | Generate certs for Minio                          | true          |
+| minio_cert_path       | Path for Minio certificate                        |               |
+| minio_key_path        | Path for Minio key                                |               |
 
 Dependencies
 ------------
