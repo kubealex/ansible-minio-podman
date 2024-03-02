@@ -85,7 +85,7 @@
       - minio
     volume:
       - minio-data:/bitnami/minio/data
-      - "{{ './certs:/certs' if minio_configure_ssl else omit }}"
+      - "{{ './certs:/certs:Z,U' if minio_configure_ssl else omit }}"
     image: docker.io/bitnami/minio
     ports:
       - "{{ minio_api_port | default(9000, true) }}:{{ minio_api_port | default(9000, true) }}"
